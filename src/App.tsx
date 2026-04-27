@@ -7,20 +7,21 @@ import { useState, useEffect } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { Toaster } from 'react-hot-toast';
 import { auth, signInWithGoogle, logout } from './lib/firebase';
-import { LayoutDashboard, Boxes, Square, Calculator, History, LogOut, PackageOpen } from 'lucide-react';
+import { LayoutDashboard, Boxes, Square, Calculator, History, LogOut, PackageOpen, ShoppingCart } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import Products from './components/Products';
 import Boards from './components/Boards';
 import ProductionCalculator from './components/Calculator';
+import InventoryPurchase from './components/Purchases';
 import ProductionHistory from './components/History';
 import { cn } from './lib/utils';
 
-type Tab = 'dashboard' | 'products' | 'boards' | 'calculator' | 'history';
+type Tab = 'dashboard' | 'products' | 'boards' | 'calculator' | 'history' | 'purchases';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<Tab>('dashboard');
+  const [activeTab, setActiveTab] = useState<Tab>('products');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (u) => {
@@ -61,9 +62,9 @@ export default function App() {
   }
 
   const navItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'products', label: 'Brinquedos', icon: Boxes },
     { id: 'boards', label: 'Tábuas', icon: Square },
+    { id: 'purchases', label: 'Compras', icon: ShoppingCart },
     { id: 'calculator', label: 'Calculadora', icon: Calculator },
     { id: 'history', label: 'Histórico', icon: History },
   ];
@@ -121,6 +122,7 @@ export default function App() {
           {activeTab === 'dashboard' && <Dashboard user={user} />}
           {activeTab === 'products' && <Products user={user} />}
           {activeTab === 'boards' && <Boards user={user} />}
+          {activeTab === 'purchases' && <InventoryPurchase user={user} />}
           {activeTab === 'calculator' && <ProductionCalculator user={user} />}
           {activeTab === 'history' && <ProductionHistory user={user} />}
         </div>
