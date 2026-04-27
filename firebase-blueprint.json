@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "A toy or component used in production.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "cost": { "type": "number" },
+        "stock": { "type": "number" },
+        "minStock": { "type": "number" },
+        "imageUrl": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "cost", "stock", "ownerId", "createdAt"]
+    },
+    "Board": {
+      "title": "Board",
+      "description": "A wood base used for the final product.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "cost": { "type": "number" },
+        "dimensions": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "cost", "ownerId", "createdAt"]
+    },
+    "Production": {
+      "title": "Production",
+      "description": "A recorded production of a final product.",
+      "type": "object",
+      "properties": {
+        "finalProductName": { "type": "string" },
+        "boardId": { "type": "string" },
+        "items": { "type": "array" },
+        "totalCost": { "type": "number" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["finalProductName", "boardId", "items", "totalCost", "ownerId", "createdAt"]
+    }
+  },
+  "firestore": {
+    "products": {
+      "schema": "Product",
+      "description": "Collection of toys/components."
+    },
+    "boards": {
+      "schema": "Board",
+      "description": "Collection of wood bases."
+    },
+    "productions": {
+      "schema": "Production",
+      "description": "History of produced items."
+    }
+  }
+}
