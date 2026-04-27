@@ -85,7 +85,7 @@ export default function InventoryPurchase({ user }: { user: User }) {
     p.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalItemsToUpdate = Object.values(pendingUpdates).reduce((a, b) => a + b, 0);
+  const totalItemsToUpdate = Object.values(pendingUpdates).reduce((a: number, b: number) => a + b, 0);
 
   if (loading) return <div className="text-center py-20 animate-pulse serif text-olive font-bold">Carregando estoque...</div>;
 
