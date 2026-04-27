@@ -87,7 +87,8 @@ export default function ProductionCalculator({ user }: { user: User }) {
   };
 
   const selectedBoard = boards.find(b => b.id === selectedBoardId);
-  const totalCost = selectedItems.reduce((acc, item) => acc + (item.unitCost * item.quantity), 0);
+  const toysTotal = selectedItems.reduce((acc, item) => acc + (item.unitCost * item.quantity), 0);
+  const totalCost = (selectedBoard?.cost || 0) + toysTotal;
 
   const handleFinishProduction = async () => {
     if (!finalProductName || !selectedBoardId || selectedItems.length === 0) {

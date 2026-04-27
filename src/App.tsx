@@ -7,22 +7,20 @@ import { useState, useEffect } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { Toaster } from 'react-hot-toast';
 import { auth, signInWithGoogle, logout } from './lib/firebase';
-import { LayoutDashboard, Boxes, Square, Calculator, History, LogOut, PackageOpen, ShoppingCart } from 'lucide-react';
+import { LayoutDashboard, Boxes, Square, Calculator, History, LogOut, PackageOpen } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import Products from './components/Products';
 import Boards from './components/Boards';
 import ProductionCalculator from './components/Calculator';
-import InventoryPurchase from './components/Purchases';
 import ProductionHistory from './components/History';
 import { cn } from './lib/utils';
 
-type Tab = 'dashboard' | 'products' | 'boards' | 'calculator' | 'history' | 'purchases';
+type Tab = 'dashboard' | 'products' | 'boards' | 'calculator' | 'history';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [signingIn, setSigningIn] = useState(false);
-  const [activeTab, setActiveTab] = useState<Tab>('products');
+  const [activeTab, setActiveTab] = useState<Tab>('dashboard');
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (u) => {
@@ -31,18 +29,6 @@ export default function App() {
     });
     return unsubscribe;
   }, []);
-
-  const handleSignIn = async () => {
-    setSigningIn(true);
-    try {
-      await signInWithGoogle();
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Erro ao entrar. Certifique-se de que os pop-ups estão permitidos ou tente abrir o app em uma nova aba.");
-    } finally {
-      setSigningIn(false);
-    }
-  };
 
   if (loading) {
     return (
@@ -64,34 +50,20 @@ export default function App() {
           <h1 className="text-3xl font-bold text-[#141414] serif mb-2">Artesanato Manager</h1>
           <p className="text-[#8E9299] mb-8">Gestão de estoque e custos para suas criações artesanais.</p>
           <button
-            onClick={handleSignIn}
-            disabled={signingIn}
-            className="w-full bg-[#5A5A40] text-white py-4 px-6 rounded-full font-medium hover:bg-[#4A4A35] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={signInWithGoogle}
+            className="w-full bg-[#5A5A40] text-white py-4 px-6 rounded-full font-medium hover:bg-[#4A4A35] transition-colors flex items-center justify-center gap-2"
           >
-            {signingIn ? (
-              <>
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Entrando...
-              </>
-            ) : (
-              'Entrar com Google'
-            )}
+            Entrar com Google
           </button>
-          
-          <p className="mt-6 text-xs text-[#8E9299]">
-            Se o login não abrir, verifique se os pop-ups estão permitidos. 
-            <br />
-            Se estiver em um domínio personalizado (como Vercel), adicione-o nos "Domínios Autorizados" do Firebase.
-          </p>
         </div>
       </div>
     );
   }
 
   const navItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { id: 'products', label: 'Brinquedos', icon: Boxes },
     { id: 'boards', label: 'Tábuas', icon: Square },
-    { id: 'purchases', label: 'Compras', icon: ShoppingCart },
     { id: 'calculator', label: 'Calculadora', icon: Calculator },
     { id: 'history', label: 'Histórico', icon: History },
   ];
@@ -149,7 +121,6 @@ export default function App() {
           {activeTab === 'dashboard' && <Dashboard user={user} />}
           {activeTab === 'products' && <Products user={user} />}
           {activeTab === 'boards' && <Boards user={user} />}
-          {activeTab === 'purchases' && <InventoryPurchase user={user} />}
           {activeTab === 'calculator' && <ProductionCalculator user={user} />}
           {activeTab === 'history' && <ProductionHistory user={user} />}
         </div>
